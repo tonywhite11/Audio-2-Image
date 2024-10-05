@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
+    <div class="container mx-auto px-4 py-8">
+        <form id="generateForm" class="max-w-md mx-auto">
+            <div class="form-control">
+                <div class="relative">
+                    <textarea id="prompt" name="prompt" class="textarea textarea-bordered w-full pr-10 pb-12" rows="5" required></textarea>
+                    <button type="button" id="micButton" class="absolute right-2 top-2 btn btn-circle btn-sm">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <div class="absolute right-2 bottom-2 flex items-center">
+                        <select id="imageCount" class="select select-bordered select-sm mr-2">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                        <label class="cursor-pointer label justify-end gap-2">
+                            <span class="label-text text-xs">Refine</span>
+                            <input type="checkbox" class="toggle toggle-primary toggle-sm" id="refineToggle" checked />
+                        </label>
+                        <span class="tooltip tooltip-left ml-1" data-tip="When enabled, the prompt will be refined using AI before generating the image.">
+                            <i class="fas fa-info-circle text-gray-400 text-xs"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div id="spinner" class="mt-8 text-center hidden">
+            <div class="pulsating-circle"></div>
+            <p class="text-gray-300 mt-4">Generating images...</p>
+        </div>
+        <div id="imageContainer" class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 hidden">
+            <!-- Images will be dynamically inserted here -->
+        </div>
+    </div>
+    <script src="{{ url_for('static', path='app.js') }}"></script>
+</body>
+</html>
