@@ -24,6 +24,9 @@ together_client = AsyncOpenAI(
     base_url="https://api.together.xyz/v1"
 )
 
+# Global variable to store current image URLs
+current_image_urls = []
+
 @app.get("/")
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
@@ -64,15 +67,19 @@ async def refine_prompt(prompt: str = Form(...), n: int = Form(1)):
 
 @app.post("/generate")
 async def generate_image(prompt: str = Form(...), n: int = Form(1)):
+    global current_image_urls
     try:
+        # Clear current image URLs
+        current_image_urls = []
+
         response = await together_client.images.generate(
             prompt=prompt,
             model="black-forest-labs/FLUX.1-schnell",
             n=n,
         )
 
-        image_urls = [img.url for img in response.data]
-        return JSONResponse(content={"image_urls": image_urls})
+        current_image_urls = [img.url for img in response.data]
+        return JSONResponse(content={"image_urls": current_image_urls})
     except Exception as e:
         print(f"Error generating image: {str(e)}")
         return JSONResponse(content={"error": "Failed to generate image"}, status_code=500)
